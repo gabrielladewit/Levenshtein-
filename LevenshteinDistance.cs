@@ -7,15 +7,20 @@ public class LevenshteinDistance
 {
     static void Main()
     {
-        string firstWord = "swimming";
-        string secondWord = "winning";
+        string firstWord = "bike";
+        string secondWord = "*ike";
 
-        Console.WriteLine("Levenshtein distance: "+ LevenshteinCalculator.Compute(firstWord, secondWord));
+        int ldistance; 
+
+        ldistance = (LevenshteinCalculator.Compute(firstWord, secondWord));
+
+        Console.WriteLine("Levenshtein distance: "+ ldistance);
     }
 }
 
 public static class LevenshteinCalculator
 {
+    static char wildcard = '*';
     public static int Compute(
         string first,
         string second
@@ -32,7 +37,7 @@ public static class LevenshteinCalculator
             return first.Length;
         }
 
-        //create arrays for both words
+        //create matrix of both words
         var d = new int[first.Length + 1, second.Length + 1];
         for (var i = 0; i <= first.Length; i++)
         {
@@ -45,15 +50,21 @@ public static class LevenshteinCalculator
         }
 
         //fill matrix
+        var cost = 0;
         for (var i = 1; i <= first.Length; i++)
         {
             for (var j = 1; j <= second.Length; j++)
             {
-                var cost = (second[j - 1] == first[i - 1]) ? 0 : 1; 
-                d[i, j] = Min( 
-                     d[i - 1, j] + 1,
-                     d[i, j - 1] + 1,
-                     d[i - 1, j - 1] + cost
+                if (second[j - 1] == wildcard){
+                    cost = 0;
+                    }else{
+                        cost = (second[j - 1] == first[i - 1]) ? 0 : 1;
+                    }
+
+                    d[i, j] = Min( 
+                     d[i - 1, j] + 1, //top, delete
+                     d[i, j - 1] + 1, //left, insert
+                     d[i - 1, j - 1] + cost //top left, replace
                 ); 
             } 
         } 
