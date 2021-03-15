@@ -37,6 +37,17 @@ public static class LevenshteinCalculator
             return first.Length;
         }
 
+        //check for wildcard, trim off string at wildcard
+        if (second[0].Equals(wildcard) && !first[0].Equals(wildcard)){
+            first = first.Substring((first.Length - second.Length) + 1);
+            second = second.Trim(wildcard);
+        }
+        
+        if (first[0].Equals(wildcard) && !second[0].Equals(wildcard)){
+            second = second.Substring((second.Length - first.Length) + 1);
+            first = first.Trim(wildcard);
+        }
+
         //create matrix of both words
         var d = new int[first.Length + 1, second.Length + 1];
         for (var i = 0; i <= first.Length; i++)
@@ -50,17 +61,11 @@ public static class LevenshteinCalculator
         }
 
         //fill matrix
-        var cost = 0;
         for (var i = 1; i <= first.Length; i++)
         {
             for (var j = 1; j <= second.Length; j++)
             {
-                if (second[j - 1] == wildcard){
-                    cost = 0;
-                    }else{
-                        cost = (second[j - 1] == first[i - 1]) ? 0 : 1;
-                    }
-
+                    var cost = (second[j - 1] == first[i - 1]) ? 0 : 1;
                     d[i, j] = Min( 
                      d[i - 1, j] + 1, //top, delete
                      d[i, j - 1] + 1, //left, insert
