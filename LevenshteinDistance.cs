@@ -7,12 +7,12 @@ public class LevenshteinDistance
 {
     static void Main()
     {
-        string firstWord = "bike";
-        string secondWord = "*ike";
+        Console.WriteLine("First word: ");
+        string firstWord = Console.ReadLine();
+        Console.WriteLine("Second word: ");
+        string secondWord = Console.ReadLine();
 
-        int ldistance; 
-
-        ldistance = (LevenshteinCalculator.Compute(firstWord, secondWord));
+        int ldistance = (LevenshteinCalculator.Compute(firstWord, secondWord));
 
         Console.WriteLine("Levenshtein distance: "+ ldistance);
     }
